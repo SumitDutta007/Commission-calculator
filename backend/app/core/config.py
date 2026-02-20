@@ -5,9 +5,9 @@ This module centralizes all business rules and system configuration,
 making them easily modifiable without touching business logic.
 Following the Open-Closed Principle (SOLID).
 """
-from typing import Final
-from pydantic import field_validator
-from pydantic_settings import BaseSettings
+from typing import Final, Union
+from pydantic import field_validator, Field
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
@@ -17,6 +17,12 @@ class Settings(BaseSettings):
     Design Decision: Using pydantic-settings for type-safe configuration
     that can be overridden via environment variables in different environments.
     """
+    
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        case_sensitive=True,
+        extra='ignore'
+    )
     
     # Application Metadata
     APP_NAME: str = "Dynamic Incentive Calculator"
@@ -32,26 +38,29 @@ class Settings(BaseSettings):
     MIN_AMOUNT: float = 0.0
     DECIMAL_PRECISION: int = 2
     
-    # CORS Settings - Can be set as string "*" or JSON array or comma-separated
-    ALLOWED_ORIGINS: list[str] = [
-        "http://localhost:3000",
-        "http://localhost:3001",
-        "http://127.0.0.1:3000",
-    ]
+    # CORS Settings - Accept string or list, will be normalized to list
+    ALLOWED_ORIGINS: Union[str, list[str]] = Field(
+        default=[
+            "http://localhost:3000",
+            "http://localhost:3001",
+            "http://127.0.0.1:3000",
+        ]
+    )
     
-    @field_validator('ALLOWED_ORIGINS', mode='before')
+    @field_validator('ALLOWED_ORIGINS')
     @classmethod
-    def parse_cors_origins(cls, v):
-        """Parse ALLOWED_ORIGINS from string or list"""
+    def parse_origins(cls, v: Union[str, list[str]]) -> list[str]:
+        """Parse ALLOWED_ORIGINS from string to list"""
         if isinstance(v, str):
-            # If it's "*", return as single-item list
+            # Handle wildcard
             if v == "*":
                 return ["*"]
-            # If it's comma-separated, split it
-            if "," in v:
-                return [origin.strip() for origin in v.split(",")]
-            # Otherwise, single origin
-            return [v]
+            # Handle comma-separated
+            elif "," in v:
+                return [o.strip() for o in v.split(",") if o.strip()]
+            # Handle single origin
+            else:
+                return [v]
         return v
     
     # API Rate Limiting (for future implementation)
@@ -60,10 +69,6 @@ class Settings(BaseSettings):
     # Observability
     LOG_LEVEL: str = "INFO"
     ENABLE_METRICS: bool = True
-    
-    class Config:
-        env_file = ".env"
-        case_sensitive = True
 
 
 # Singleton instance
