@@ -1,6 +1,9 @@
 # Dynamic Incentive Calculator
 
 A production-grade, full-stack commission calculation system built for evaluating principal-level engineering capabilities. This system demonstrates clean architecture, comprehensive testing, DevOps best practices, and scalability considerations.
+[Frontend](https://commission-calculator-git-main-sumitdutta007s-projects.vercel.app/)
+[Backend](https://incentive-calculator-api.onrender.com)
+[Documentation](https://incentive-calculator-api.onrender.com/docs)
 
 ## 🏗️ Architecture Overview
 
@@ -21,7 +24,7 @@ A production-grade, full-stack commission calculation system built for evaluatin
  - Client Validation                  - Schema Validation
 ```
 
-### Backend Architecture (Clean Architecture)
+### Backend Architecture
 
 ```
 app/
@@ -40,12 +43,6 @@ app/
         └── commission.py
 ```
 
-**Why Clean Architecture?**
-- **Testability**: Business logic isolated from framework
-- **Independence**: Domain rules don't depend on FastAPI
-- **Maintainability**: Clear separation of concerns
-- **Scalability**: Easy to add new calculation strategies
-- **Flexibility**: Can swap FastAPI for another framework
 
 ### Frontend Architecture
 
@@ -116,27 +113,15 @@ Sales: $96,000  | Target: $120,000 | Achievement: 80.00% | Commission: $4,800 �
 
 ## 📊 Code Quality & Testing
 
-### Backend Testing Strategy
-
-**Coverage**: 90%+ required (`pytest --cov-fail-under=90`)
 
 **Test Categories**:
-1. **Boundary Value Analysis**
-   - 79.99% (just below threshold)
-   - 80.00% (exactly at threshold)
-   - 80.01% (just above threshold)
-
-2. **Equivalence Partitioning**
-   - Below threshold (0-79.99%)
-   - Above threshold (80%+)
-
-3. **Edge Cases**
+1. **Edge Cases**
    - Zero sales
    - Sales exceeding target
    - Large numbers (near MAX_AMOUNT)
    - Decimal precision
 
-4. **Error Path Testing**
+2. **Error Path Testing**
    - Negative values
    - Zero target
    - Invalid configurations
@@ -322,7 +307,7 @@ docker-compose up -d
 - **Stateless**: No session storage, horizontally scalable
 - **Container-Ready**: Docker images for orchestration
 
-### Scaling Strategies
+### Scaling Strategies (For future)
 
 **Vertical Scaling**:
 ```python
@@ -476,20 +461,6 @@ const [result, setResult] = useState(null);
 const [loading, setLoading] = useState(false);
 // ... repeated in every component
 ```
-
-## 📝 Code Review Checklist
-
-- [x] Clean Architecture principles
-- [x] 90%+ backend test coverage
-- [x] 80%+ frontend test coverage
-- [x] Type safety (Python type hints, TypeScript)
-- [x] Input validation (Pydantic, client-side)
-- [x] Error handling (custom exceptions)
-- [x] Documentation (docstrings, comments)
-- [x] DevOps (Docker, CI/CD)
-- [x] Security (non-root user, validation)
-- [x] Scalability (stateless, horizontal scaling)
-- [x] Code quality (linting, formatting)
 
 ## 📚 Additional Resources
 
