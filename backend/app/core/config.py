@@ -6,6 +6,7 @@ making them easily modifiable without touching business logic.
 Following the Open-Closed Principle (SOLID).
 """
 from typing import Final
+from pydantic import field_validator
 from pydantic_settings import BaseSettings
 
 
@@ -31,12 +32,27 @@ class Settings(BaseSettings):
     MIN_AMOUNT: float = 0.0
     DECIMAL_PRECISION: int = 2
     
-    # CORS Settings
+    # CORS Settings - Can be set as string "*" or JSON array or comma-separated
     ALLOWED_ORIGINS: list[str] = [
         "http://localhost:3000",
         "http://localhost:3001",
         "http://127.0.0.1:3000",
     ]
+    
+    @field_validator('ALLOWED_ORIGINS', mode='before')
+    @classmethod
+    def parse_cors_origins(cls, v):
+        """Parse ALLOWED_ORIGINS from string or list"""
+        if isinstance(v, str):
+            # If it's "*", return as single-item list
+            if v == "*":
+                return ["*"]
+            # If it's comma-separated, split it
+            if "," in v:
+                return [origin.strip() for origin in v.split(",")]
+            # Otherwise, single origin
+            return [v]
+        return v
     
     # API Rate Limiting (for future implementation)
     RATE_LIMIT_PER_MINUTE: int = 100
