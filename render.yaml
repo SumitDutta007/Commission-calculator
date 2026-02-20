@@ -16,7 +16,7 @@ services:
       - key: ELIGIBILITY_THRESHOLD
         value: "0.80"
       - key: ALLOWED_ORIGINS
-        value: "*" # Update this with your frontend URL after deployment
+        value: "https://incentive-calculator-frontend.onrender.com,http://localhost:3000"
       - key: PORT
         value: "8000"
     healthCheckPath: /api/v1/commission/health
@@ -30,7 +30,7 @@ services:
     dockerContext: ./frontend
     envVars:
       - key: NEXT_PUBLIC_API_URL
-        sync: false # Set this manually to your backend URL
+        value: "https://incentive-calculator-api.onrender.com"
       - key: PORT
         value: "3000"
     plan: free # Free tier
