@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: incentive-calculator-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - ENV=production
+      - COMMISSION_RATE=0.05
+      - ELIGIBILITY_THRESHOLD=0.80
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/commission/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+    networks:
+      - incentive-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: incentive-calculator-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - incentive-network
+
+networks:
+  incentive-network:
+    driver: bridge

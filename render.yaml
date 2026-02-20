@@ -1,0 +1,32 @@
+# Render.com deployment configuration
+# Deploy both frontend and backend with one click!
+
+services:
+  # Backend API Service
+  - type: web
+    name: incentive-calculator-api
+    env: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    envVars:
+      - key: ENV
+        value: production
+      - key: COMMISSION_RATE
+        value: "0.05"
+      - key: ELIGIBILITY_THRESHOLD
+        value: "0.80"
+      - key: ALLOWED_ORIGINS
+        value: "*"  # Update this with your frontend URL after deployment
+    healthCheckPath: /api/v1/commission/health
+    plan: free  # Free tier
+
+  # Frontend Service
+  - type: web
+    name: incentive-calculator-frontend
+    env: docker
+    dockerfilePath: ./frontend/Dockerfile
+    dockerContext: ./frontend
+    envVars:
+      - key: NEXT_PUBLIC_API_URL
+        sync: false  # Set this manually to your backend URL
+    plan: free  # Free tier
