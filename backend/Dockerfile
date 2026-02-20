@@ -25,16 +25,17 @@ COPY --chown=appuser:appuser ./app ./app
 ENV PATH=/home/appuser/.local/bin:$PATH
 ENV PYTHONPATH=/app
 ENV PYTHONUNBUFFERED=1
+ENV PORT=8000
 
 # Switch to non-root user
 USER appuser
 
-# Expose port
+# Expose port (Render will use PORT env variable)
 EXPOSE 8000
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
     CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/v1/commission/health')" || exit 1
 
-# Production command with proper worker configuration
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "4"]
+# Production command - Uses $PORT from Render or defaults to 8000
+CMD uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000} --workers 1

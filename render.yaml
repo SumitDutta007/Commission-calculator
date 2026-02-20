@@ -5,7 +5,7 @@ services:
   # Backend API Service
   - type: web
     name: incentive-calculator-api
-    env: docker
+    runtime: docker
     dockerfilePath: ./backend/Dockerfile
     dockerContext: ./backend
     envVars:
@@ -17,16 +17,20 @@ services:
         value: "0.80"
       - key: ALLOWED_ORIGINS
         value: "*"  # Update this with your frontend URL after deployment
+      - key: PORT
+        value: "8000"
     healthCheckPath: /api/v1/commission/health
     plan: free  # Free tier
 
   # Frontend Service
   - type: web
     name: incentive-calculator-frontend
-    env: docker
+    runtime: docker
     dockerfilePath: ./frontend/Dockerfile
     dockerContext: ./frontend
     envVars:
       - key: NEXT_PUBLIC_API_URL
         sync: false  # Set this manually to your backend URL
+      - key: PORT
+        value: "3000"
     plan: free  # Free tier

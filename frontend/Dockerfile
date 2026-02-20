@@ -35,16 +35,17 @@ RUN chown -R nextjs:nodejs /app
 # Switch to non-root user
 USER nextjs
 
-# Expose port
+# Expose port (Render uses PORT env variable)
 EXPOSE 3000
 
-# Set environment variable
+# Set environment variables
 ENV NODE_ENV=production
+ENV HOSTNAME=0.0.0.0
 ENV PORT=3000
 
-# Health check
+# Health check - use PORT variable
 HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
-    CMD node -e "require('http').get('http://localhost:3000', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})"
+    CMD node -e "const port = process.env.PORT || 3000; require('http').get(\`http://localhost:\${port}\`, (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})"
 
-# Start application
+# Start application - server.js will use PORT env variable
 CMD ["node", "server.js"]
