@@ -1,9 +1,18 @@
 # Dynamic Incentive Calculator
 
-A production-grade, full-stack commission calculation system built for evaluating principal-level engineering capabilities. This system demonstrates clean architecture, comprehensive testing, DevOps best practices, and scalability considerations.
-[Frontend](https://commission-calculator-git-main-sumitdutta007s-projects.vercel.app/)
-[Backend](https://incentive-calculator-api.onrender.com)
-[Documentation](https://incentive-calculator-api.onrender.com/docs)
+A production-grade, full-stack commission calculation system built with clean architecture, comprehensive testing, and DevOps best practices. Calculates sales commissions based on target achievement with an 80% eligibility threshold and 5% commission rate.
+
+## 🚀 Live Demo
+
+- **Frontend**: [https://commission-calculator-git-main-sumitdutta007s-projects.vercel.app/](https://commission-calculator-git-main-sumitdutta007s-projects.vercel.app/)
+- **Backend API**: [https://incentive-calculator-api.onrender.com](https://incentive-calculator-api.onrender.com)
+- **API Documentation**: [https://incentive-calculator-api.onrender.com/docs](https://incentive-calculator-api.onrender.com/docs) (Interactive Swagger UI)
+- **Health Check**: [https://incentive-calculator-api.onrender.com/api/v1/commission/health](https://incentive-calculator-api.onrender.com/api/v1/commission/health)
+
+## ✅ Assignment Requirements Met
+
+**Task**: Create a single API-endpoint solution that accepts Sales_Amount and Target_Amount as inputs and returns the resulting Commission.
+
 
 ## 🏗️ Architecture Overview
 
